@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heightened Sense</title>
+    <style>
+        @font-face {
+            font-family: 'Tempting';
+            src: url('tempting.ttf') format('truetype');
+        }
+        
+        body {
+            background-color: #2C2F12;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            padding: 50px;
+        }
+        
+        h1 {
+            font-family: 'Tempting', serif;
+            font-size: 100px;
+            margin-bottom: 10px;
+            color: bisque;
+        }
+
+        h2 {
+            font-family: 'Tempting';
+            font-size: 25px;
+            color: bisque;
+            padding-top: 30px;
+        }
+        
+        p {
+            max-width: 750px;
+            margin: 0 auto 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            font-family: 'Courier New', Courier, monospace;
+            color: bisque;
+            line-height: 0.7cm;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding-bottom: 30px;
+            justify-items: center;
+        }
+        
+       .artwork {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s;
+    display: inline-block; /* Change from flex to inline-block */
+    max-width: 300px;
+}
+        
+        .artwork:hover {
+            transform: scale(1.05);
+        }
+        
+        .artwork img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+        
+        .view-all {
+            margin-top: 20px;
+
+        }
+
+        .view-all a {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-family: 'Courier New', Courier, monospace;
+            color: rgb(213, 238, 211);
+            background-color: (255, 255, 255, 0.1);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .view-all a:hover {
+            background-color: #a6a97e;
+        }
+    </style>
+</head>
+<body>
+    <h1>Synesthesia </h1>
+    <p>
+        This project explores the translation of art across sensory mediums, reinterpreting the source material to create new layers of meaning.  
+        By transforming famous artworks into alternate forms—sound, touch, movement—it creates an accessible means of interpretation.
+        Synesthesia's digital archive seeks to dissolve limitations, allowing diverse audiences to experience art beyond its original form.  
+    </p>
+    
+    <h2> Paintings </h2>
+    <div class="gallery">
+        <div class="artwork">
+            <a href="ophelia.html">
+                <img src="ophelia.png" alt="Ophelia">
+                <p>Ophelia</p>
+            </a>
+        </div>
+        <div class="artwork">
+            <a href="fridas.html">
+                <img src="fridas.png" alt="The Two Fridas">
+                <p>The Two Fridas</p>
+            </a>
+        </div>
+        <div class="artwork">
+            <a href="scream.html">
+                <img src="scream.png" alt="The Scream">
+                <p>The Scream</p>
+            </a>
+        </div>
+        <div class="artwork">
+            <a href="starrynight.html">
+                <img src="starrynight.png" alt="Starry Night">
+                <p>Starry Night</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="view-all">
+        <a href="paintings.html">View All</a>
+    </div>
+
+    <h2> Music </h2>
+    <div class="gallery">
+        <div class="artwork">
+            <a href="cigarettedaydreams.html">
+            <img src="cigcover.png" alt="Cigarette Daydreams">
+            <p>Cigarette Daydreams</p>
+        </a>
+        </div>
+        <div class="artwork">
+            <img src="letitbe.png" alt="Placeholder">
+            <p>Let It Be (placeholder) </p>
+        </div>
+        <div class="artwork">
+            <img src="time.png" alt="Placeholder">
+            <p>Time (Placeholder)</p>
+        </div>
+        <div class="artwork">
+            <img src="beethoven.png" alt="Placeholder">
+            <p>Sonata No. 14 (Placeholder)</p>
+        </div>
+    </div>
+
+    <h2> Poetry and Literature </h2>
+    <div class="gallery">
+        <div class="artwork">
+          
+            <img src="maya.png" alt="Placeholder">
+            <p>Still I Rise by Maya Angelou (Placeholder)</p>
+        </a>
+        </div>
+        <div class="artwork">
+            <img src="1.png" alt="Placeholder">
+            <p>(Placeholder) </p>
+        </div>
+        <div class="artwork">
+            <img src="2.png" alt="Placeholder">
+            <p>(Placeholder)</p>
+        </div>
+        <div class="artwork">
+            <img src="3.png" alt="Placeholder">
+            <p>(Placeholder)</p>
+        </div>
+    </div>
+</body>
+</html>

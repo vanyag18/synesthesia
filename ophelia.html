@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ophelia's Lament</title>
+    <style>
+        @font-face {
+            font-family: 'Tempting';
+            src: url('tempting.ttf') format('truetype');
+        }
+        
+        body {
+            text-align: center;
+            background-color: #824242;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        #back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: bisque;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+        }
+        
+        #back-button:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Tempting', serif;
+            font-size: 110px;
+            color: bisque;
+            margin-bottom: 10px;
+        }
+
+        #instruction {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 20px;
+            color: bisque;
+            margin-bottom: 12px;
+        }
+
+        #poem {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            background: hsl(31, 100%, 88%);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            font-family: 'Courier New', Courier, monospace;
+            color: #441313;
+        }
+
+        img {
+            width: 600px;
+            transition: transform 0.3s;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body onclick="showPoem()">
+    <button id="back-button" onclick="goBack(event)">&#8592; Back</button>
+    <h1>Ophelia</h1>
+    <p id="instruction">Click on the screen to reveal Ophelia's lament. <br> Hear the echoes of the water she lies in by <br> hovering over the painting.</p>
+    <img id="ophelia-image" src="ophelia.png" alt="Ophelia">
+    <div id="poem"></div>
+
+    <audio id="water-sound" src="water.mp3"></audio>
+    <audio id="leaves-sound" src="leaves.mp3"></audio>
+    <audio id="crying-sound" src="crying.mp3"></audio>
+    <audio id="ophelia-audio" src="ophelia.mp3"></audio>
+
+    <script>
+        function showPoem() {
+            var poemText = `Beneath the willow’s trailing woe,  \nA maiden drifts where violets grow.  \nHer fingers loose, the petals fall—  \nA silent plea, unheard by all.\n\nHer gown, once bright, in water sways,  \nA ghostly bloom in twilight haze.  \nThe river hums a sorrowed tune,  \nA requiem beneath the moon.\n\nOh, Ophelia—fate unkind,  \nA fleeting spark, a fractured mind.  \nIn painted stillness, lost, she lies—  \nA dream of love, with open eyes.`;
+            
+            document.getElementById("poem").innerText = poemText;
+            document.getElementById("poem").style.display = "block";
+
+            let opheliaAudio = document.getElementById("ophelia-audio");
+            opheliaAudio.currentTime = 0;
+            opheliaAudio.play();
+        }
+
+        function goBack(event) {
+            event.stopPropagation();
+            stopAllAudio();
+            window.location.href = "synesthesiaarchive.html";
+        }
+
+        let opheliaImage = document.getElementById("ophelia-image");
+        let waterSound = document.getElementById("water-sound");
+        let leavesSound = document.getElementById("leaves-sound");
+        let cryingSound = document.getElementById("crying-sound");
+
+        opheliaImage.addEventListener("mousemove", function(event) {
+            let x = event.offsetX;
+            let y = event.offsetY;
+            let width = this.clientWidth;
+            let height = this.clientHeight;
+
+            if (y > height * 0.5) {
+                if (waterSound.paused) {
+                    waterSound.currentTime = 0;
+                    waterSound.play();
+                }
+                leavesSound.pause();
+                leavesSound.currentTime = 0;
+            } else {
+                if (leavesSound.paused) {
+                    leavesSound.currentTime = 0;
+                    leavesSound.play();
+                }
+                waterSound.pause();
+                waterSound.currentTime = 0;
+            }
+
+            if (x < width * 0.4 && y > height * 0.5) {
+                if (cryingSound.paused) {
+                    cryingSound.currentTime = 0;
+                    cryingSound.play();
+                }
+            } else {
+                cryingSound.pause();
+                cryingSound.currentTime = 0;
+            }
+        });
+
+        opheliaImage.addEventListener("mouseleave", function() {
+            waterSound.pause();
+            waterSound.currentTime = 0;
+            leavesSound.pause();
+            leavesSound.currentTime = 0;
+            cryingSound.pause();
+            cryingSound.currentTime = 0;
+        });
+
+        function stopAllAudio() {
+            waterSound.pause();
+            leavesSound.pause();
+            cryingSound.pause();
+            document.getElementById("ophelia-audio").pause();
+            waterSound.currentTime = 0;
+            leavesSound.currentTime = 0;
+            cryingSound.currentTime = 0;
+            document.getElementById("ophelia-audio").currentTime = 0;
+        }
+
+        window.addEventListener("beforeunload", stopAllAudio);
+    </script>
+</body>
+</html>

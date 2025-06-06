@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starry Night & Vincent</title>
+    <style>
+        @font-face {
+            font-family: 'Tempting';
+            src: url('tempting.ttf') format('truetype');
+        }
+
+        body {
+            background-color: #2a3051;
+            color: #f5e1da;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 40px;
+        }
+        #back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #f5e1da;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+        }
+
+        #back-button:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Tempting', serif;
+            font-size: 90px;
+            color: #f5e1da;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 22px;
+            color: #f5e1da;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-family: 'Courier New', Courier, monospace;
+            size: 22px;
+        }
+
+        .container {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .left img {
+            width: 600px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .left img:hover {
+            transform: scale(1.05);
+        }
+
+        .right {
+            width: 500px;
+        }
+
+        #lyrics {
+            background: #f5e1da;
+            color: #5a3d31;
+            padding: 20px;
+            border-radius: 8px;
+            height: 400px;
+            overflow-y: auto;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .button-container {
+            margin-top: 15px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-family: 'Courier New', Courier, monospace;
+            border: none;
+            background-color: #e8d02f;
+            color: rgb(23, 29, 73);
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #6b3728;
+        }
+
+        .glow-dot {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, rgba(255, 255, 100, 0.8) 10%, rgba(100, 149, 237, 0.6) 80%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: fadeOut 1s ease-out;
+    
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(2);
+    }
+}
+
+    </style>
+</head>
+<body>
+    <button id="back-button" onclick="goBack(event)">&#8592; Back</button>
+    <h1>Starry Night</h1>
+    <h2> By Vincent Van Gogh </h2>
+    <p>Click the painting to hear its voice.</p>
+    <div class="container">
+        <div class="left">
+            <img id="painting" src="starrynight.png" alt="Starry Night by Vincent van Gogh">
+        </div>
+        <div class="right">
+            <h2>Vincent - Don McLean</h2>
+            <div id="lyrics">
+                Starry, starry night<br>
+                Paint your palette blue and gray<br>
+                Look out on a summer's day<br>
+                With eyes that know the darkness in my soul<br>
+                <br><br>
+                Shadows on the hills<br>
+                Sketch the trees and the daffodils<br>
+                Catch the breeze and the winter chills<br>
+                In colors on the snowy linen land<br>
+                <br><br>
+                Now I understand<br>
+                What you tried to say to me<br>
+                And how you suffered for your sanity<br>
+                And how you tried to set them free<br>
+                They would not listen, they did not know how<br>
+                Perhaps they'll listen now<br>
+                <br><br>
+                Starry, starry night<br>
+                Flaming flowers that brightly blaze<br>
+                Swirling clouds in violet haze<br>
+                Reflect in Vincent's eyes of China blue<br>
+                <br><br>
+                Colors changing hue<br>
+                Morning fields of amber grain<br>
+                Weathered faces lined in pain<br>
+                Are soothed beneath the artist's loving hand<br>
+                <br><br>
+                Now I understand<br>
+                What you tried to say to me<br>
+                And how you suffered for your sanity<br>
+                And how you tried to set them free<br>
+                They would not listen, they did not know how<br>
+                Perhaps they'll listen now<br>
+                <br><br>
+                For they could not love you<br>
+                But still, your love was true<br>
+                And when no hope was left in sight on that starry, starry night<br>
+                You took your life, as lovers often do<br>
+                But I could have told you, Vincent<br>
+                This world was never meant for one as beautiful as you<br>
+                <br><br>
+                Starry, starry night<br>
+                Portraits hung in empty halls<br>
+                Frameless heads on nameless walls<br>
+                With eyes that watch the world and can't forget<br>
+                <br><br>
+                Like the strangers that you've met<br>
+                The ragged men in ragged clothes<br>
+                The silver thorn, a bloody rose<br>
+                Lie crushed and broken on the virgin snow<br>
+                <br><br>
+                Now I think I know<br>
+                What you tried to say to me<br>
+                And how you suffered for your sanity<br>
+                And how you tried to set them free<br>
+                They would not listen, they're not listening still<br>
+                Perhaps they never will<br>
+                
+            </div>
+            <div class="button-container">
+                <button onclick="pauseSong()">Pause</button>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="song" src="starrynight.mp3"></audio>
+    
+    <script>
+        document.addEventListener("mousemove", function (event) {
+        const dot = document.createElement("div");
+        dot.classList.add("glow-dot");
+
+        // Set position
+        dot.style.left = `${event.pageX}px`;
+        dot.style.top = `${event.pageY}px`;
+
+        document.body.appendChild(dot);
+
+        // Remove the dot after a short delay
+        setTimeout(() => {
+            dot.remove();
+        }, 1000); // Dots fade out in 1 second
+    });
+
+        function goBack(event) {
+            event.stopPropagation();
+            window.location.href = "synesthesiaarchive.html";
+        } 
+
+        document.getElementById("painting").addEventListener("click", function() {
+            let song = document.getElementById("song");
+            song.play();
+        });
+
+        function pauseSong() {
+            document.getElementById("song").pause();
+        }
+    </script>
+</body>
+</html>

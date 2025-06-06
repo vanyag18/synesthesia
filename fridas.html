@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Two Fridas</title>
+    <style>
+        @font-face {
+            font-family: 'Tempting';
+            src: url('tempting.ttf') format('truetype');
+        }
+
+        body {
+            text-align: center;
+            background-color: #b68d80;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+            position: relative;
+        }
+
+        #back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #f5e1da;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+        }
+
+        #back-button:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Tempting', serif;
+            font-size: 90px;
+            color: #f5e1da;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 22px;
+            color: #f5e1da;
+            margin-bottom: 15px;
+        }
+
+        #instruction {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 20px;
+            color: #f5e1da;
+            margin-bottom: 12px;
+        }
+
+        #dialogue {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            background: #f5e1da;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            font-family: 'Courier New', Courier, monospace;
+            color: #5a3d31;
+            text-align: left;
+        }
+
+        img {
+            width: 600px;
+            transition: transform 0.3s;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+        }
+
+        #speak-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            background-color: #8b4a39;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            display: none;
+        }
+
+        #speak-btn:hover {
+            background-color: #6b3728;
+        }
+    </style>
+</head>
+<body onclick="showDialogue()">
+    <button id="back-button" onclick="goBack(event)">&#8592; Back</button>
+    <h1>The Two Fridas</h1>
+    <h2>By Frida Kahlo</h2>
+    <p id="instruction">Click on the screen to reveal the conversation between Frida Kahlo's two personalities; one of a broken-hearted, divorced Frida, and the other, a modern and independent version of her.</p>
+    <img id="frida-image" src="fridas.png" alt="The Two Fridas">
+    <div id="dialogue"></div>
+    <button id="speak-btn" onclick="speakDialogue()">🎙️ Hear the Dialogue</button>
+
+    <script>
+        function showDialogue() {
+            let dialogueText = `<strong>Traditional Frida:</strong> You hold my hand, yet I feel no warmth. We are the same, yet different. My heart bleeds for Diego's love lost. How do you stand so strong?
+
+            <strong>Modern Frida:</strong> Because love does not leave, it transforms. He did not take me; he simply stepped aside. We must learn to walk alone.
+
+            <strong>Traditional Frida:</strong> But alone feels unbearable. Without him, I am barely holding together.
+
+            <strong>Modern Frida:</strong> And yet, we do not break. Look at us. We are still here. The love we gave was never just for him. It was for the world, for our art, for us.
+
+            <strong>Traditional Frida:</strong> But my heart…
+
+            <strong>Modern Frida:</strong> Let it beat for yourself this time.`;
+
+            document.getElementById("dialogue").innerHTML = dialogueText.replace(/\n/g, "<br>");
+            document.getElementById("dialogue").style.display = "block";
+            document.getElementById("speak-btn").style.display = "inline-block";
+        }
+
+        function goBack(event) {
+            event.stopPropagation();
+            stopSpeech();
+            window.location.href = "synesthesiaarchive.html";
+        }
+
+    function speakDialogue() {
+        stopSpeech();
+        let voices = speechSynthesis.getVoices();
+
+        // Find two distinct female voices
+        let femaleVoices = voices.filter(voice => voice.name.includes("Female") || voice.name.includes("Woman"));
+        let frida1Voice = femaleVoices[0] || voices.find(voice => voice.lang.includes("en")) || voices[0];
+        let frida2Voice = femaleVoices[1] || voices.find(voice => voice.lang.includes("en")) || voices[1];
+
+        let dialogue = [
+            { text: "You hold my hand, yet I feel no warmth. We are the same, yet different. My heart bleeds for Diego's love lost. How do you stand so strong?", voice: frida1Voice },
+            { text: "Because love does not leave, it transforms. He did not take me; he simply stepped aside. We must learn to walk alone.", voice: frida2Voice },
+            { text: "But alone feels unbearable. Without him, I am barely holding together.", voice: frida1Voice },
+            { text: "And yet, we do not break. Look at us. We are still here. The love we gave was never just for him. It was for the world, for our art, for us.", voice: frida2Voice },
+            { text: "But my heart…", voice: frida1Voice },
+            { text: "Let it beat for yourself this time.", voice: frida2Voice }
+        ];
+
+        function speakLine(index) {
+            if (index < dialogue.length) {
+                let utterance = new SpeechSynthesisUtterance(dialogue[index].text);
+                utterance.voice = dialogue[index].voice;
+                utterance.onend = () => speakLine(index + 1);
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        speakLine(0);
+    }
+
+    function stopSpeech() {
+        speechSynthesis.cancel();
+    }
+
+    window.speechSynthesis.onvoiceschanged = function () {
+        // Refresh voices once available
+        let voices = speechSynthesis.getVoices();
+        console.log(voices.map(v => v.name)); // Debugging: List all available voices
+    };
+
+    window.addEventListener("beforeunload", stopSpeech);
+</script>
+
+</body>
+</html>

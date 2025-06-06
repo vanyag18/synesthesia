@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cigarette Daydreams - Morse Code</title>
+    <style>
+        @font-face {
+            font-family: 'Tempting';
+            src: url('tempting.ttf') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: rgb(162, 64, 71);
+            color: rgb(255, 220, 231);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #f5e1da;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+        }
+
+        #back-button:hover {
+            text-decoration: underline;
+        } 
+        /* Title styling with album cover */
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .album-cover {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-family: 'Tempting', sans-serif;
+            font-size: 60px;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: normal;
+            color: rgb(255, 220, 231);
+            margin-bottom: 20px;
+        }
+
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .box {
+            width: 48%;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.1);
+            min-height: 300px;
+            position: relative;
+        }
+
+        .lyrics {
+            font-size: 20px;
+            line-height: 1.6;
+        }
+
+        .button {
+            background: white;
+            color: black;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .button:hover {
+            background: gray;
+        }
+
+        .morse-container {
+            font-size: 18px;
+            word-wrap: break-word;
+            text-align: left;
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
+            white-space: pre-wrap;
+            min-height: 100px;
+        }
+
+        #visualImage {
+    display: none;
+    width: 60%;
+    max-height: 340px; /* Limits the height */
+    object-fit: cover; /* Ensures it maintains aspect ratio */
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+    </style>
+</head>
+<body>
+
+    <button id="back-button" onclick="goBack(event)">&#8592; Back</button>
+
+    <!-- Title with Album Cover -->
+    <div class="title-container">
+        <img src="cigcover.png" alt="Album Cover" class="album-cover">
+        <h1>Cigarette Daydreams</h1>
+    </div>
+    <h2>by Cage the Elephant</h2>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Lyrics Box -->
+        <div class="box">
+            <div class="lyrics">
+                <p>Cigarette daydream<br>You were only seventeen<br>Soft speak with a mean streak<br>Nearly brought me to my knees</p>
+                <p>Do-do-do<br>Do-do-do</p>
+                <p>You can drive all night<br>Lookin' for the answers in the pourin' rain<br>You wanna find peace of mind<br>Lookin' for the answer</p>
+                <p>If we can find a reason, a reason to change<br>Lookin' for the answers<br>If you can find a reason, a reason to stay<br>Standin' in the pourin' rain</p>
+            </div>
+
+            <button class="button" onclick="toggleSong()">▶ Play Song</button>
+            <button class="button" onclick="showVisualization()">🎨 Visualize</button>
+            <audio id="song" src="cigarettedaydreams.mp3"></audio>
+        </div>
+
+        <!-- Morse Code Box -->
+        <div class="box">
+            <div class="morse-container" id="morseOutput"></div>
+            <button class="button" onclick="toggleMorse()">🔊 Play Morse</button>
+            <img id="visualImage" src="cig.png" alt="Cigarette Visualization">
+        </div>
+
+    </div>
+
+    <script>
+        const morseCodeText = "-.-. .. --. .- .-. . - - . / -.. .- -.-- -.. .-. . .- -- / -.-- --- ..- / .-- . .-. . / --- -. .-.. -.-- / ... . ...- . - -. - . . -. / ... --- ..-. - / ... .--. . .- -.- / .-- .. - .... / .- / -- . .- -. / ... - .-. . .- -.- / -. . .- .-. .-.. -.-- / -... .-. --- ..- --. .... - / -- . / - --- / -- -.-- / -.- -. . . ... / -.. --- -....- -.. --- -....- -.. --- / -.. --- -....- -.. --- -....- -.. --- / -.-- --- ..- / -.-. .- -. / -.. .-. .. ...- . / .- .-.. .-.. / -. .. --. .... - / .-.. --- --- -.- .. -. .----.";
+
+        let morseAudioContext;
+        let morsePlaying = false;
+        let song = document.getElementById("song");
+
+        function toggleSong() {
+    if (song.paused) {
+        stopMorse();
+        song.currentTime = 181; // Start at 3:02
+        song.play();
+        
+        // Stop the song at 4:00 (240 seconds)
+        song.addEventListener("timeupdate", function checkTime() {
+            if (song.currentTime >= 240) {
+                song.pause();
+                song.currentTime = 180; // Reset to 3:02 for replay
+                song.removeEventListener("timeupdate", checkTime);
+            }
+        });
+    } else {
+        song.pause();
+    }
+}
+
+
+function goBack(event) {
+            event.stopPropagation();
+            window.location.href = "synesthesiaarchive.html";
+        } 
+
+        function playMorseCode(morseCode) {
+            if (morsePlaying) return;
+            morsePlaying = true;
+
+            morseAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+            let time = morseAudioContext.currentTime;
+            let morseOutput = document.getElementById("morseOutput");
+            morseOutput.innerHTML = ""; // Clear previous text
+            let delay = 0;
+
+            function playBeep(duration, frequency) {
+                let oscillator = morseAudioContext.createOscillator();
+                let gainNode = morseAudioContext.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(morseAudioContext.destination);
+                oscillator.type = "sine";
+                oscillator.frequency.value = frequency;
+                gainNode.gain.value = 0.5;
+                oscillator.start(time + delay);
+                oscillator.stop(time + delay + duration);
+                delay += duration + 0.1;
+            }
+
+            let displayedText = "";
+            for (let char of morseCode) {
+                setTimeout(() => {
+                    displayedText += char;
+                    morseOutput.innerText = displayedText;
+                }, delay * 1000);
+
+                if (char === ".") playBeep(0.1, 600);
+                else if (char === "-") playBeep(0.3, 600);
+                else if (char === " ") delay += 0.2;
+                else if (char === "/") delay += 0.6;
+            }
+
+            setTimeout(() => {
+                morsePlaying = false;
+            }, delay * 1000);
+        }
+
+        function toggleMorse() {
+            if (morsePlaying) {
+                stopMorse();
+            } else {
+                song.pause();
+                playMorseCode(morseCodeText);
+            }
+        }
+
+        function stopMorse() {
+            if (morsePlaying && morseAudioContext) {
+                morseAudioContext.close();
+            }
+            morsePlaying = false;
+            document.getElementById("morseOutput").innerText = "";
+        }
+
+        function showVisualization() {
+            document.getElementById("visualImage").style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
+

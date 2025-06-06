@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Scream by Edvard Munch</title>
+    <style>
+        @font-face {
+            font-family: 'Tempting';
+            src: url('tempting.ttf') format('truetype');
+        }
+
+        body {
+            text-align: center;
+            background-color: #2a3051; /* A fiery red background reflecting the emotional tones of The Scream */
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+            position: relative;
+        }
+
+        #back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #f5e1da;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+        }
+
+        #back-button:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Tempting', serif;
+            font-size: 90px;
+            color: #f5e1da;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 22px;
+            color: #f5e1da;
+            margin-bottom: 15px;
+        }
+
+        #instruction {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 20px;
+            color: #f5e1da;
+            margin-bottom: 12px;
+        }
+
+        #dialogue {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            background: #f5e1da;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            font-family: 'Courier New', Courier, monospace;
+            color: #5a3d31;
+            text-align: left;
+        }
+
+        img {
+            width: 600px;
+            transition: transform 0.3s;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+        }
+
+        #scream-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            background-color: #8b4a39;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            display: none;
+        }
+
+        #scream-btn:hover {
+            background-color: #6b3728;
+        }
+    </style>
+</head>
+<body onclick="showDialogue()">
+    <button id="back-button" onclick="goBack(event)">&#8592; Back</button>
+    <h1>The Scream</h1>
+    <h2>By Edvard Munch</h2>
+    <p id="instruction"> Use the button below to distort your own scream <br> and give a voice to Munch's screaming man!</p>
+    <img id="scream-img" src="scream.png" alt="The Scream">
+    <div id="dialogue"></div>
+    <button id="scream-btn" onclick="startMicDistortion()">🎤 Scream into Mic</button>
+
+    <script>
+        function showDialogue() {
+            let dialogueText = `I felt the scream passing through nature. The sky was on fire, and the world seemed to stop. The pain inside me echoed in the expanse of everything, drowning out every voice except my own.\n\n`;
+            document.getElementById("dialogue").innerHTML = dialogueText.replace(/\n/g, "<br>");
+            document.getElementById("dialogue").style.display = "block";
+            document.getElementById("scream-btn").style.display = "inline-block";
+    
+            // Read aloud the dialogue texts
+            readAloud(dialogueText);
+        }
+    
+        function goBack(event) {
+            event.stopPropagation();
+            stopSpeech();
+            window.location.href = "synesthesiaarchive.html";
+        }
+    
+        async function startMicDistortion() {
+            stopSpeech(); // Stop speech when clicking the scream button
+    
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const source = audioContext.createMediaStreamSource(stream);
+            const distortion = audioContext.createWaveShaper();
+    
+            function makeDistortionCurve(amount) {
+                let curve = new Float32Array(44100);
+                for (let i = 0; i < 44100; i++) {
+                    let x = (i * 2) / 44100 - 1;
+                    curve[i] = (3 + amount) * x * 20 * (Math.PI / 180) / (Math.PI + amount * Math.abs(x));
+                }
+                return curve;
+            }
+    
+            distortion.curve = makeDistortionCurve(800);
+            distortion.oversample = '4x';
+    
+            source.connect(distortion);
+            distortion.connect(audioContext.destination);
+        }
+    
+        function stopSpeech() {
+            speechSynthesis.cancel();
+        }
+    
+        function readAloud(text) {
+            const speech = new SpeechSynthesisUtterance(text);
+            speech.lang = 'en-US';
+            window.speechSynthesis.speak(speech);
+        }
+    
+        window.addEventListener("beforeunload", stopSpeech);
+    </script>
+    
+</body>
+</html>
